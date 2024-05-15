@@ -1,0 +1,48 @@
+main: dev.escanortargaryen.SimpleEconomy
+name: SimpleEconomy
+version: 1.0
+author: [ EscanorTargaryen ]
+
+api-version: 1.15
+depend: [ Vault ]
+
+
+commands:
+  economy:
+    description: Commands to manage balances
+    aliases: [eco]
+    permission: eco.eco
+  balance:
+    description: Command to show balances
+    aliases: [bal]
+    permission: eco.balance.command
+  pay:
+    description: Command to transfer money from a player to another
+    permission: eco.pay
+
+permissions:
+  eco.*:
+    description: All EconomyAPI permissions
+    default: op
+    children:
+      eco.eco: true
+      eco.balance.*: true
+      eco.pay: true
+  eco.balance.*:
+    description: All /balance permissions
+    default: op
+    children:
+      eco.balance.command: true
+      eco.balance.others: true
+  eco.eco:
+    description: /eco
+    default: op
+  eco.balance.command:
+    description: /bal
+    default: true
+  eco.pay:
+    description: /pay
+    default: true
+  eco.balance.others:
+    description: /bal <playerName>
+    default: op
