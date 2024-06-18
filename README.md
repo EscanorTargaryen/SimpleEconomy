@@ -10,7 +10,7 @@ Simple economy plugin that works with Vault for testing purposes.
 * Use this plugin with Vault
 
 ## Links
-**Download** from [here](https://github.com/EscanorTargaryen/SimpleEconomy/releases/tag/1.0.0).
+**Download** from [here](https://github.com/EscanorTargaryen/SimpleEconomy/releases/tag/1.0.1).
 
 **Official** economy testing plugin for [RoadsideShops](https://github.com/EscanorTargaryen/RoadsideShops)
 
