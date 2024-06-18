@@ -3,6 +3,8 @@ name: SimpleEconomy
 version: 1.0
 author: [ EscanorTargaryen ]
 
+load: STARTUP
+
 api-version: 1.15
 depend: [ Vault ]
 
