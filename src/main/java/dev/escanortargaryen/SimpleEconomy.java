@@ -15,6 +15,8 @@ import org.bukkit.plugin.ServicePriority;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import java.io.File;
+import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.util.List;
 
 public class SimpleEconomy extends JavaPlugin implements Listener {
@@ -37,7 +39,6 @@ public class SimpleEconomy extends JavaPlugin implements Listener {
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
-
 
         economy = new VaultEconomy(database);
 
@@ -90,19 +91,12 @@ public class SimpleEconomy extends JavaPlugin implements Listener {
     }
 
     public static void add(OfflinePlayer player, double amount) {
-        double a;
-
-        a = format(amount);
-
-        database.setBalance(player, database.getBalance(player) + a);
-
+        database.setBalance(player, database.getBalance(player) + amount);
 
     }
 
     public static void remove(OfflinePlayer player, double amount) {
-        final double a = format(amount);
-
-        double am = database.getBalance(player) - a;
+        double am = database.getBalance(player) - amount;
 
         database.setBalance(player, am >= 0 ? am : 0);
     }
@@ -113,7 +107,7 @@ public class SimpleEconomy extends JavaPlugin implements Listener {
 
     }
 
-    public static String  getWithFormat(OfflinePlayer player) {
+    public static String getWithFormat(OfflinePlayer player) {
 
         return getEconomy().format(get(player));
 
@@ -121,26 +115,24 @@ public class SimpleEconomy extends JavaPlugin implements Listener {
 
     public static boolean has(OfflinePlayer player, double amount) {
         verify(amount);
-        return database.getBalance(player) >= format(amount);
+        return database.getBalance(player) >= amount;
     }
 
     public static void set(OfflinePlayer player, double amount) {
-        final double a = format(amount);
-
-        database.setBalance(player, a);
+        database.setBalance(player, amount);
 
     }
 
     public static double pay(OfflinePlayer sender, OfflinePlayer reciver, double amount) {
         verify(amount);
-        final double a = format(amount);
+
         boolean modified = false;
         if (has(sender, amount)) {
             modified = true;
-            remove(sender, a);
-            add(reciver, a);
+            remove(sender, amount);
+            add(reciver, amount);
         }
-        return modified ? a : 0;
+        return modified ? amount : 0;
 
     }
 
@@ -156,10 +148,13 @@ public class SimpleEconomy extends JavaPlugin implements Listener {
         Validate.isTrue(d >= 0, "Amount must be a positive number");
     }
 
-    public static double format(double d) {
-        return Math.round(d * 100) / 100;
-    }
+    public static double round(double value, int places) {
+        if (places < 0) throw new IllegalArgumentException();
 
+        BigDecimal bd = BigDecimal.valueOf(value);
+        bd = bd.setScale(places, RoundingMode.HALF_UP);
+        return bd.doubleValue();
+    }
 
     public static List<OfflinePlayer> getPlayers() {
         return database.getPlayerNames();
